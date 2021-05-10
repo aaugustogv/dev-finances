@@ -1,3 +1,10 @@
 ### Maratona Discover || Rocketseat 
 ---
-Utilizando  HTML5, CSS3 e JavaScript
+
+## 🚀 Tecnologias
+
+Esse projeto foi desenvolvido com as seguintes tecnologias:
+
+- HTML
+- CSS
+- JavaScript
