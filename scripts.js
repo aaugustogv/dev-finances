@@ -39,10 +39,17 @@ const transactions =[
 ]
 
 const Transaction = {
+    all: transactions,
+
+    add(transaction){
+        Transaction.all.push(transaction)
+
+        App.reload()
+    },
     income() {
         let income = 0;
 
-        transactions.forEach(transaction => {
+        Transaction.all.forEach(transaction => {
 
             if(transaction.amount > 0) {
                 income += transaction.amount;
@@ -55,7 +62,7 @@ const Transaction = {
     expense() {
         let expense = 0;
 
-        transactions.forEach(transaction => {
+        Transaction.all.forEach(transaction => {
 
             if(transaction.amount < 0) {
                 expense += transaction.amount;
@@ -112,6 +119,10 @@ const DOM = {
         document
         .getElementById('totalDisplay')
         .innerHTML = Utils.formatCurrency(Transaction.total())
+    },
+
+    clearTransactions() { // eu limpo aqui
+        DOM.transactionsContainer.innerHTML = ""
     }
 }
 
@@ -132,9 +143,29 @@ const Utils = {
     }
 }
 
-transactions.forEach(function(transaction) {
-    DOM.addTransaction(transaction)
+const App = {
+    init() {
+
+        Transaction.all.forEach(transaction => {
+            DOM.addTransaction(transaction)
+        })
+        
+        DOM.updateBalance()
+    },
+    reload() {
+        DOM.clearTransactions() // Ele vai limpar com o clearTransaction e so adicionar
+        //o que o Transaction.add der
+        App.init()
+    }
+}
+
+App.init()
+
+Transaction.add({
+    id:4,
+    description:'Teste',
+    amount: 2000,
+    date: '24/01/2022'
 })
 
-DOM.updateBalance()
 
