@@ -74,7 +74,7 @@ header {
     padding: 1.5rem 2rem;
     border-radius: 0.25rem;
     margin-bottom: 2rem;
-    box-shadow: 5px 7px 12px rgba(0, 0, 0, 0.5);
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 
     color: var(--dark-blue);
 }
@@ -240,6 +240,8 @@ td.expenses {
 
     position: relative;
     z-index: 1;
+
+    border-radius: 12px;
 }
 
 /* ========== Form =========*/
