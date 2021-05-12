@@ -15,7 +15,7 @@ const transactions =[
     {
         id: 1,
         description: 'Luz',
-        amount: -50000,
+        amount: -500111,
         date: '23/01/2021'
     },
     {
@@ -29,18 +29,46 @@ const transactions =[
         description: 'Internet',
         amount: -20000,
         date: '23/01/2021'
-    }
+    },
+    {
+        id: 4,
+        description: 'App',
+        amount: 245600,
+        date: '23/01/2021'
+    },
 ]
 
 const Transaction = {
     income() {
-        //somar as entradas
+        //chamar a variável do retrun
+        let income = 0;
+        //pegar todas as transações
+        //para cada transação
+        transactions.forEach(transaction => {
+            //se ela for maior que zero
+            if(transaction.amount > 0) {
+                //somar a variável
+                income += transaction.amount;
+            }
+        })
+       return income;
     },
     expense() {
-        //somar as saídas
+        //chamar a variável do retrun
+        let expense = 0;
+        //pegar todas as transações
+        //para cada transação
+        transactions.forEach(transaction => {
+            //se ela for menor que zero
+            if(transaction.amount < 0) {
+                //somar a variável
+                expense += transaction.amount;
+            }
+        })
+        return expense
     },
     total() {
-        //entradas - saidas
+        return "discover"
     }
 }
 
@@ -65,7 +93,7 @@ const DOM = {
         
         const html = `
             <td class="description">${transaction.description}</td> 
-            <td class="${CSSclass}">${transaction.amount}</td>
+            <td class="${CSSclass}">${amount}</td>
             <td class="date">${transaction.date}</td>
             <td> 
                 <img src="./assets/minus.svg" alt="Remover Transação">
@@ -73,27 +101,42 @@ const DOM = {
        
         `
         return html
+    },
+
+    updateBalance() {
+
+        document
+        .getElementById('incomeDisplay')
+        .innerHTML = Transaction.income()
+        document
+        .getElementById('expenseDisplay')
+        .innerHTML = Transaction.expense()
+        document
+        .getElementById('totalDisplay')
+        .innerHTML = Transaction.total()
     }
 }
 
 const Utils = {
-    formatCurrency(value) { //Vamos entender como funciono os números do .amount
-        const signal = Number(value) < 0 ? "-" : "" // se menor 1ue 0 adicione - (menos)
+    formatCurrency(value) { 
+        const signal = Number(value) < 0 ? "-" : "" 
 
-        value = String(value).replace(/\D/g,"") // se for uma String, coloque nada
+        value = String(value).replace(/\D/g,"") 
 
-        value = Number(value) / 100 // atualizei o value para número de novo
+        value = Number(value) / 100 
 
-        value = value.toLocaleString("pt-BR", { //e aqui utilizamos o .toLocaleString para aplicar o tipo de moeda em que estamos trabalhando
-            style: "currency", //estilo moeda
+        value = value.toLocaleString("pt-BR", { 
+            style: "currency", 
             currency: "BRL"
         })
 
-        console.log(signal + value)
+        return signal + value
     }
 }
 
 transactions.forEach(function(transaction) {
     DOM.addTransaction(transaction)
 })
+
+DOM.updateBalance()
 
