@@ -40,35 +40,33 @@ const transactions =[
 
 const Transaction = {
     income() {
-        //chamar a variável do retrun
         let income = 0;
-        //pegar todas as transações
-        //para cada transação
+
         transactions.forEach(transaction => {
-            //se ela for maior que zero
+
             if(transaction.amount > 0) {
-                //somar a variável
                 income += transaction.amount;
             }
+
         })
+
        return income;
     },
     expense() {
-        //chamar a variável do retrun
         let expense = 0;
-        //pegar todas as transações
-        //para cada transação
+
         transactions.forEach(transaction => {
-            //se ela for menor que zero
+
             if(transaction.amount < 0) {
-                //somar a variável
                 expense += transaction.amount;
             }
+
         })
+
         return expense
     },
     total() {
-        return "discover"
+        return Transaction.income() + Transaction.expense();
     }
 }
 
@@ -107,13 +105,13 @@ const DOM = {
 
         document
         .getElementById('incomeDisplay')
-        .innerHTML = Transaction.income()
+        .innerHTML = Utils.formatCurrency(Transaction.income())
         document
         .getElementById('expenseDisplay')
-        .innerHTML = Transaction.expense()
+        .innerHTML = Utils.formatCurrency(Transaction.expense())
         document
         .getElementById('totalDisplay')
-        .innerHTML = Transaction.total()
+        .innerHTML = Utils.formatCurrency(Transaction.total())
     }
 }
 
