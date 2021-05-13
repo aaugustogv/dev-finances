@@ -11,41 +11,44 @@ const Modal = {
     }
 }
 
-const transactions =[
-    {
-        id: 1,
-        description: 'Luz',
-        amount: -500111,
-        date: '23/01/2021'
-    },
-    {
-        id: 2,
-        description: 'WebSite',
-        amount: 500000,
-        date: '23/01/2021'
-    }, 
-    {
-        id: 3,
-        description: 'Internet',
-        amount: -20000,
-        date: '23/01/2021'
-    },
-    {
-        id: 4,
-        description: 'App',
-        amount: 245600,
-        date: '23/01/2021'
-    },
-]
 
 const Transaction = {
-    all: transactions,
+
+    all: [
+        {
+            description: 'Luz',
+            amount: -500111,
+            date: '23/01/2021'
+        },
+        {
+            description: 'WebSite',
+            amount: 500000,
+            date: '23/01/2021'
+        }, 
+        {
+            description: 'Internet',
+            amount: -20000,
+            date: '23/01/2021'
+        },
+        {
+            description: 'App',
+            amount: 245600,
+            date: '23/01/2021'
+        },
+    ],
 
     add(transaction){
         Transaction.all.push(transaction)
 
         App.reload()
     },
+
+    remove(index) {
+        Transaction.all.splice(index, 1)
+
+        App.reload()
+    },
+
     income() {
         let income = 0;
 
@@ -59,6 +62,7 @@ const Transaction = {
 
        return income;
     },
+
     expense() {
         let expense = 0;
 
@@ -72,12 +76,12 @@ const Transaction = {
 
         return expense
     },
+
     total() {
         return Transaction.income() + Transaction.expense();
     }
 }
 
-//Pegar os dados do HTML e substituir pelo os do JS
 const DOM = {
 
     transactionsContainer: document.querySelector('#data-table tbody'), 
@@ -121,12 +125,25 @@ const DOM = {
         .innerHTML = Utils.formatCurrency(Transaction.total())
     },
 
-    clearTransactions() { // eu limpo aqui
+    clearTransactions() { 
         DOM.transactionsContainer.innerHTML = ""
     }
 }
 
 const Utils = {
+
+    formatAmount(value) {
+        value = Number(value) * 100 
+
+        return value
+    },
+
+    formatDate(date) {
+        const splittedDate = date.split("-")
+
+        return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`
+    },
+
     formatCurrency(value) { 
         const signal = Number(value) < 0 ? "-" : "" 
 
@@ -143,6 +160,72 @@ const Utils = {
     }
 }
 
+const Form = {
+
+    description: document.querySelector('input#description'), //Fui lá peguei do HTML
+    amount: document.querySelector('input#amount'),
+    date: document.querySelector('input#date'),
+
+    getValues() {
+        return {
+            description: Form.description.value, // Aqui recebo os valores do Form com o .value
+            amount: Form.amount.value,
+            date: Form.date.value
+        }
+    },
+
+    validateFields() {
+        const { description, amount, date } = Form.getValues()
+
+        if(description.trim() === "" || //Se não tiver
+        amount.trim() === "" || 
+        date.trim() === "") {
+            throw new Error("Preencha todos os campos") // retorna alert
+        }
+    },
+
+    formatValues() { //formatando os dados
+        let { description, amount, date } = Form.getValues()
+
+        amount = Utils.formatAmount(amount)
+
+        date = Utils.formatDate(date)
+
+        return {
+            description,
+            amount,
+            date
+        }
+    },
+
+    clearFields() {
+        Form.description.value = ""
+        Form.amount.value = ""
+        Form.date.value = ""
+    },
+
+    submit(event) {
+        event.preventDefault()
+
+        try {
+
+        //verificar se todas as informacoes foram preenchidas
+        Form.validateFields()
+        //formatar os dados para salvar 
+        const transaction = Form.formatValues()
+        //Salvar
+        Transaction.add(transaction)
+        // apagar os dados do form
+        Form.clearFields()
+        // modal feche
+        Modal.close()
+        } catch (error) {
+            alert(error.message)
+        }
+        
+    }
+}
+
 const App = {
     init() {
 
@@ -153,19 +236,13 @@ const App = {
         DOM.updateBalance()
     },
     reload() {
-        DOM.clearTransactions() // Ele vai limpar com o clearTransaction e so adicionar
-        //o que o Transaction.add der
+        DOM.clearTransactions() 
         App.init()
     }
 }
 
 App.init()
 
-Transaction.add({
-    id:4,
-    description:'Teste',
-    amount: 2000,
-    date: '24/01/2022'
-})
+ 
 
 
