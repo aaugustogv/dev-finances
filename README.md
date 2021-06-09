@@ -10,5 +10,5 @@
 Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 - HTML
-- CSS
+- CSS3
 - JavaScript
